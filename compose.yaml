@@ -14,8 +14,8 @@ services:
       CPU_CORES: "4" # CPU cores allocated to the Windows VM.
       DISK_SIZE: "32G" # Size of the primary hard disk.
       # DISK2_SIZE: "32G" # Uncomment to add an additional hard disk to the Windows VM. Ensure it is mounted as a volume below.
-      USERNAME: "replacemyusername" # Edit here to set a custom Windows username. The default is 'MyWindowsUser'.
-      PASSWORD: "replacemypassword" # Edit here to set a password for the Windows user. The default is 'MyWindowsPassword'.
+      USERNAME: "${WIN_USERNAME}" # Edit via .env -> WIN_USERNAME. Default is 'MyWindowsUser'.
+      PASSWORD: "${WIN_PASSWORD}" # Edit via .env -> WIN_PASSWORD. Default is 'MyWindowsPassword'.
       HOME: "${HOME}" # Set path to Linux user home folder.
     ports:
       - 8006:8006 # Map '8006' on Linux host to '8006' on Windows VM --> For VNC Web Interface @ http://127.0.0.1:8006.
@@ -30,7 +30,7 @@ services:
       - ${HOME}:/shared # Mount Linux user home directory @ '\\host.lan\Data'.
       #- /path/to/second/hard/disk:/storage2 # Uncomment to create a virtual second hard disk and mount it within the Windows VM. Ensure 'DISK2_SIZE' is specified above.
       - ./oem:/oem # Enables automatic post-install execution of 'oem/install.bat', applying Windows registry modifications contained within 'oem/RDPApps.reg'.
-      - /home/replacemyusername/Downloads/tiny11-23H2-x64.iso:/custom.iso # Uncomment to use a custom Windows ISO. If specified, 'VERSION' (e.g. 'tiny11') will be ignored.
+      - /home/${LINUX_USERNAME}/Downloads/tiny11-23H2-x64.iso:/custom.iso # Uses .env -> LINUX_USERNAME for host path.
     devices:
       - /dev/kvm # Enable KVM.
       - /dev/net/tun # Enable tuntap
