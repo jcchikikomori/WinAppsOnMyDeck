@@ -9,7 +9,7 @@ services:
       VERSION: "${WIN_VERSION}"
       RAM_SIZE: "4G"
       CPU_CORES: "4"
-      DISK_SIZE: "32G"
+      DISK_SIZE: "48G"
       USERNAME: "${WIN_USERNAME}"
       PASSWORD: "${WIN_PASSWORD}"
       HOME: "${HOME}"
@@ -24,8 +24,8 @@ services:
     volumes:
       - data:/storage
       - ${HOME}:/shared
-      - ./oem:/oem
-      # - /home/${LINUX_USERNAME}/Downloads/tiny11-23H2-x64.iso:/custom.iso
+      - ${OEM_PATH}:/oem
+      - ${CUSTOM_ISO_PATH}:/custom.iso
     devices:
       - /dev/kvm
       - /dev/net/tun
