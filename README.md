@@ -81,3 +81,20 @@ docker compose --file ~/.config/winapps/compose.yaml restart # Restart the Windo
 docker compose --file ~/.config/winapps/compose.yaml stop # Gracefully shut down the Windows VM
 docker compose --file ~/.config/winapps/compose.yaml kill # Force shut down the Windows VM
 ```
+
+## Steam Deck Notes
+
+- Recommended backend: Prefer `Docker` (rootless/systemless) or `libvirt` on SteamOS. Traditional rootful Docker installs and mutable system changes can be fragile on Deck; rootless/systemless Docker or `libvirt` are more resilient across updates.
+- FreeRDP requirement: Install FreeRDP v3 so the `xfreerdp3` client is available on the system. WinApps uses FreeRDP v3; older clients are not supported.
+- RDP security flag: Ensure `RDP_FLAGS` includes `/sec:tls` to allow connecting to the VM using TLS with the default self-signed certificate. This reduces strict certificate validation and is less secure; consider replacing the certificate with a trusted one in production setups.
+- Command selection: If auto-detection fails, explicitly set `FREERDP_COMMAND` to `xfreerdp3` in your config.
+
+Example `~/.config/winapps/winapps.conf` entries:
+
+```ini
+# Use TLS and accept self-signed cert on first use
+RDP_FLAGS="/sec:tls /cert:tofu /sound /microphone +home-drive"
+
+# Force FreeRDP v3 client
+FREERDP_COMMAND="xfreerdp3"
+```
